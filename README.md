@@ -1,0 +1,111 @@
+Michael E. Karpeles
+
+Running
+=======
+
+To run the code, simply type:
+
+(run "zoo") to learn a decision tree for "zoo.names" and "zoo.data")
+or
+(run "balloons" "adult-stretch") to learn a tree for "balloons.names" "adult-stretch.data"
+
+
+Trial
+=====
+
+    CL-USER> (run "zoo") ; test on the zoo training data
+     o <LEGS?>
+      \ via 5
+       +--(5)--> 7
+       |
+       +--(8)--> 7
+       |
+       o <AQUATIC?>
+        \ via 1
+          +--(1)--> 7
+          |
+          +--(0)--> 6
+          |
+          o <HAIR?>
+           \ via 0
+            +--(0)--> 2
+            |
+            +--(1)--> 1
+            |
+            o <FINS?>
+            \ via 1
+              o <EGGS?>
+               \ via 1
+                 +--(1)--> 4
+                 |
+                 +--(0)--> 1
+                 |
+                 o <TOOTHED?>
+                  \ via 0
+                   +--(0)--> 7
+                   |
+                   +--(1)--> 3
+                   |
+                   o <HAIR?>
+                    \ via 0
+                      +--(1)--> 1
+                      |
+                      o <AQUATIC?>
+                       \ via 1
+                         +--(0)--> 3
+                         |
+                         o <TOOTHED?>
+                          \ via 0
+                            +--(0)--> 7
+                            |
+                            +--(1)--> 5
+                            |
+    T
+
+
+Tests 
+===== 
+
+The following methods are available for testing the components of the
+decision tree builder:
+
+    ;; -------------------------------------------------------------------|
+    (defun test-print-tree ()
+      "Demonstrates that the ability to print a tree is complete"
+      (print-tree-h '(1 (2 3 (4 5 (6)) 7 8 (9) (10 11) 12 13 (14 (15 (16)))))))
+    
+    (defun test-information-gain (attribute-n file-root)
+      "TEST: (test-information-gain 3 \"balloons\")"
+      (let* ((dataset   (run file-root))
+       (attribute (aref (data-set-features dataset) attribute-n))
+    	 (examples  (data-set-examples dataset))) 
+        (information-gain attribute examples)))
+    
+    (defun test-remainder (attribute-n file-root)
+      "TEST: (test-remainder 3 \"balloons\")"
+      (let* ((dataset   (run file-root))
+    	 (attribute (aref (data-set-features dataset) attribute-n))
+    	 (examples  (data-set-examples dataset)))
+        (remainder attribute examples)))
+    
+    (defun test-entropy (file-root)
+      "TEST: (test-entropy (data-set-examples (load-project \"balloons\")"
+      (entropy (data-set-examples (load-project file-root))))
+    
+    (defun test-partitions-of (attribute-n file-root)
+      "TEST: (test-partitions-of 2 (load-project \"balloons\""
+      (let* ((dataset   (run file-root))
+    	 (attribute (aref (data-set-features dataset) attribute-n))
+    	 (examples  (data-set-examples dataset))) 
+        (partitions-of attribute examples)))
+    ;; -------------------------------------------------------------------|
+
+
+References
+==========
+* For verifying correctness, 
+- test.data and 
+- test.names 
+were derived from:
+Teknomo, Kardi. (2009) Tutorial on Decision Tree.
+http://people.revoledu.com/kardi/tutorial/DecisionTree/
